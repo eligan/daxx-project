@@ -1,14 +1,16 @@
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
-const logger = require('koa-logger')
+const logger = require('koa-logger');
 const config = require('config');
 
 const db = require('./db');
 const router = require('./routes')();
+const { globalErrorHandler } = require('./middlewares');
 
 const server = new Koa();
 
 server
+    .use(globalErrorHandler)
     .use(logger())
     .use(bodyParser())
     .use(router.routes())

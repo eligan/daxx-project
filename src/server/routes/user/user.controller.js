@@ -3,7 +3,8 @@ const { userService, responseService } = require('../../services');
 const controller = {
     getUsersList: async (ctx) => {
         const params = ctx.request.query;
-        const list = await userService.getUsersList(params)
+        const list = await userService.getUsersList(params);
+        throw new Error('fuuck');
         return responseService.ok(ctx, list);
     },
     createUser: async (ctx) => {
