@@ -15,9 +15,8 @@
 * Use a Mongo database and commit the code to GIT
 * Data-model:
 
-⋅⋅⋅ - Email address (required, unique + validated)⋅⋅
-⋅⋅⋅ - Password (required, 7 alphanumeric characters and 1 capital letter)⋅⋅
-⋅⋅⋅ - First name (required, 25 chars)⋅⋅
-⋅⋅⋅ - Last name (required, 25 chars)⋅⋅
-⋅⋅⋅ - City (optional, 25 chars)⋅⋅
-
+   - Email address (required, unique + validated)
+   - Password (required, 7 alphanumeric characters and 1 capital letter)
+   - First name (required, 25 chars)
+   - Last name (required, 25 chars)
+   - City (optional, 25 chars)
