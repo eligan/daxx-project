@@ -1,0 +1,264 @@
+openapi: 3.0.1
+info:
+  title: DAXX Project API
+  version: '1.0'
+  description: All user operations provided by DAXX Project API
+servers:
+- url: 'http://localhost:3000'
+  description: Local server
+paths:
+  /api/users:
+    description: Get users list
+    get:
+      parameters:
+      - name: email
+        in: query
+        required: false
+        description: User email
+        example: example@example.com
+        schema:
+          type: string
+          format: email
+      - name: firstName
+        in: query
+        required: false
+        description: User first name
+        example: John
+        schema:
+          type: string
+          maxLength: 25
+      - name: lastName
+        in: query
+        required: false
+        description: User last name
+        example: Lenon
+        schema:
+          type: string
+          maxLength: 25
+      - name: city
+        in: query
+        required: false
+        description: User city
+        example: London
+        schema:
+          type: string
+          maxLength: 25
+      tags:
+      - User
+      summary: Get users list
+      responses:
+        200:
+          description: List of users filtered by query
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResponse'
+        500:
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+      - User
+      summary: Create new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        200:
+          description: Created user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        409:
+          description: User with provided email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/users/{userId}:
+    description: Get a specific user
+    parameters:
+    - name: userId
+      in: path
+      required: true
+      example: 5d231d43514a80cf7685dbfd
+      description: Id of user
+      schema:
+        type: string
+        format: ObjectId
+    get:
+      tags:
+      - User
+      summary: Get a specific user
+      responses:
+        200:
+          description: Single user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        404:
+          description: User with provided id is not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    patch:
+      tags:
+      - User
+      summary: Update user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdate'
+      responses:
+        200:
+          description: Updated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        400:
+          description: Can not update not existing user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+      - User
+      summary: Delete user
+      responses:
+        200:
+          description: User with provided id was successfully deleted
+        400:
+          description: Can not delete not existing user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    UserCreate:
+      type: object
+      required:
+      - email
+      - password
+      - firstName
+      - lastName
+      properties:
+        email:
+          type: string
+          example: example@example.com
+        password:
+          type: string
+          minLength: 8
+          maxLength: 8
+          description: 7 alphanumeric characters and 1 capital letter
+          example: abCdef12
+        firstName:
+          type: string
+          maxLength: 25
+          example: John
+        lastName:
+          type: string
+          maxLength: 25
+          example: Lenon
+        city:
+          type: string
+          maxLength: 25
+          example: London
+    UserUpdate:
+      type: object
+      properties:
+        password:
+          type: string
+          minLength: 8
+          maxLength: 8
+          description: 7 alphanumeric characters and 1 capital letter
+          example: abCdef12
+        firstName:
+          type: string
+          maxLength: 25
+          example: John
+        lastName:
+          type: string
+          maxLength: 25
+          example: Lenon
+        city:
+          type: string
+          maxLength: 25
+          example: London
+    UserResponse:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: ObjectId
+          example: 5d231d43514a80cf7685dbfd
+        email:
+          type: string
+          example: example@example.com
+        firstName:
+          type: string
+          maxLength: 25
+          example: John
+        lastName:
+          type: string
+          maxLength: 25
+          example: Lenon
+        city:
+          type: string
+          maxLength: 25
+          example: London
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: number
+              description: HTTP response code
+              example: 500
+            status:
+              type: string
+              description: Short status
+              example: INTERNAL
+            message:
+              type: string
+              description: Error message
+              example: Internal Error
