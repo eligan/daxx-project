@@ -4,7 +4,8 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "node ./src/server/server.js"
+        "start": "node ./src/server/server.js",
+        "test": "jest -c jest.config.js"
     },
     "author": "Roman Liuk",
     "license": "ISC",
@@ -16,10 +17,12 @@
     "dependencies": {
         "ajv": "^6.10.1",
         "config": "^3.1.0",
+        "jest": "^24.8.0",
         "koa": "^2.7.0",
         "koa-bodyparser": "^4.2.1",
         "koa-logger": "^3.2.0",
         "koa-router": "^7.4.0",
-        "mongoose": "^5.6.3"
+        "mongoose": "^5.6.3",
+        "sinon": "^7.3.2"
     }
 }

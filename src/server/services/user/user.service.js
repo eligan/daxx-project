@@ -7,8 +7,7 @@ const service = {
     createUser: async (userData, opts = {}) => {
         const passwordHash = service.getPasswordHash(userData.password);
         const preparedUserData = { ...userData, password: passwordHash };
-        const userDoc = new User(preparedUserData);
-        await userDoc.save();
+        const userDoc = await User.create(preparedUserData);
         if (opts.raw) {
             return userDoc;
         }
@@ -30,7 +29,7 @@ const service = {
         query.projection(baseProjection);
         return query.exec();
     },
-    getUsersList: async (params, opts = {}) => {
+    getUsersList: async (params = {}, opts = {}) => {
         const conditions = {};
         Object.keys(params).forEach((key) => {
             conditions[key] = new RegExp(params[key], 'i');
